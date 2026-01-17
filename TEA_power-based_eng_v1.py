@@ -18,7 +18,7 @@ st.sidebar.header("Input Parameters")
 st.sidebar.subheader("Technical")
 
 h2_capacity_kw = st.sidebar.number_input("Hydrogen Production Capacity (kW)", min_value=0.0, value=5000.0, step=100.0)
-construction_years = st.sidebar.number_input("Construction Period (years)", min_value=0.0, value=2.0, step=0.5)
+# construction_years = st.sidebar.number_input("Construction Period (years)", min_value=0.0, value=2.0, step=0.5)
 operation_years = st.sidebar.number_input("Operation Period (years)", min_value=1.0, value=20.0, step=1.0)
 stack_replacement_hours = st.sidebar.number_input("Stack Replacement Cycle (hours)", min_value=0.0, value=60000.0, step=1000.0)
 annual_operating_hours = st.sidebar.number_input("Annual Operating Hours (hours/year)", min_value=0.0, max_value=8760.0, value=8000.0, step=100.0)
@@ -37,11 +37,11 @@ capex_total = capex_construction + capex_equipment
 opex_annual = st.sidebar.number_input("OPEX (annual, USD/year)", min_value=0.0, value=2_300_000.0, step=1_000.0)
 elec_price = st.sidebar.number_input("Electricity Fee (USD/kWh)", min_value=0.0, value=0.04, step=0.01)
 h2_price = st.sidebar.number_input("Hydrogen Selling Price (USD/kgH₂)", min_value=0.0, value=7.7, step=0.1)
-o2_price = st.sidebar.number_input("Oxygen Selling Price (USD/kgO₂)", min_value=0.0, value=0.04, step=0.01)
-heat_price = st.sidebar.number_input("Heat Selling Price (USD/MWh)", min_value=0.0, value=0.0, step=1.0)
+o2_price = st.sidebar.number_input("Oxygen Selling Price (USD/kgO₂) : TBD", min_value=0.0, value=0.04, step=0.01)
+heat_price = st.sidebar.number_input("Heat Selling Price (USD/MWh) : TBD", min_value=0.0, value=0.0, step=1.0)
 discount_rate = st.sidebar.number_input("Discount Rate (%/year)", min_value=0.0, max_value=20.0, value=7.0, step=0.1)
 inflation_rate = st.sidebar.number_input("Inflation Rate (%/year)", min_value=0.0, max_value=10.0, value=2.0, step=0.1)
-cost_of_capital = st.sidebar.number_input("Cost of Capital (%/year)", min_value=0.0, max_value=20.0, value=8.0, step=0.1)
+# cost_of_capital = st.sidebar.number_input("Cost of Capital (%/year)", min_value=0.0, max_value=20.0, value=8.0, step=0.1)
 corp_tax_rate = st.sidebar.number_input("Corporate Tax Rate (%)", min_value=0.0, max_value=50.0, value=20.0, step=0.1)
 tax_rate = corp_tax_rate / 100.0
 
@@ -456,3 +456,4 @@ with col_fin:
     fig_pay.update_xaxes(tickfont=dict(size=16))
     fig_pay.update_yaxes(tickfont=dict(size=16))
     st.plotly_chart(fig_pay, use_container_width=True)
+
