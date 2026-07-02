@@ -38,12 +38,9 @@ time using Plotly:
 
 ## Methodology
 
-The calculation follows the NREL H2A after-tax DCF convention (designated **T1** in
+The calculation follows the after-tax DCF convention (designated **T1** in
 the accompanying review), which serves as the baseline against which alternative
-institutional conventions are compared. For a representative 1 MW PEM baseline
-(1,800 USD/kW, 51 kWh/kg, 50 USD/MWh, 50 % capacity factor, 8 % real WACC, 22 %
-corporate tax, 20-year life), the tool reproduces a baseline LCOH of 
-consistent with the in-text baseline tables of the review.
+institutional conventions are compared.
 
 ---
 
