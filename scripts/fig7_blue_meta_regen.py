@@ -6,20 +6,6 @@ fig7_blue_meta_regen.py
 Regenerates manuscript Figure 7 (blue hydrogen meta-analysis).
 Output: Figure_2_blue_meta.png (matches \includegraphics reference), 300 dpi.
 
-REVISION HISTORY :
-  - Panel (b): ALL project-name annotations removed (editorial decision:
-    de-identify projects; references remain in Table 6).
-  - Panel (b): Linde/Woodside Beaumont coordinate corrected 4.2 -> 2.2 Mt-CO2/yr.
-    Verified directly against IEA Hydrogen Production Projects Database
-    (June 2026), row "Woodside Energy Beaumont New Ammonia (Texas)",
-    Technology details = ATR+CCUS, Capacity (t CO2 capt/y) = 2,200,000.
-  - Panel (b): Ascension coordinate = 7.6 Mt (IEA DB "ACE complex (LA),
-    phase 2" = full build-out; the old ~12 Mt coordinate is obsolete).
-  - Panel (a): pools follow Table 6 Note verbatim -- Table 6 TEA values +
-    Table 1 reforming-route estimates, dual "a/b" values split:
-    SMR-CCS n=11 (median 2.35), ATR-CCS n=8 (median 1.63).
-    Manuscript text updated accordingly (2.36->2.35, 1.66->1.63).
-
 DATA PROVENANCE (panel a):
   SMR pool: Salkuyeh2022 (1.69, 2.36) | Wu2024/NETL2023 (1.64) | Zang2024 (1.56)
             ACS2025 (3.22, 2.59) | IEAGHG2022 range endpoints (2.35, 2.83)
