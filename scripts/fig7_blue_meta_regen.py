@@ -6,7 +6,7 @@ fig7_blue_meta_regen.py
 Regenerates manuscript Figure 7 (blue hydrogen meta-analysis).
 Output: Figure_2_blue_meta.png (matches \includegraphics reference), 300 dpi.
 
-REVISION HISTORY (2026-07-03, session with Claude):
+REVISION HISTORY :
   - Panel (b): ALL project-name annotations removed (editorial decision:
     de-identify projects; references remain in Table 6).
   - Panel (b): Linde/Woodside Beaumont coordinate corrected 4.2 -> 2.2 Mt-CO2/yr.
