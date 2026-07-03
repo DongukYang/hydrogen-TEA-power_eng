@@ -6,12 +6,6 @@ fig9_scaleup_regen.py
 Regenerates manuscript Figure 9 (cost-component share across plant scale).
 Output: Figure_6_scaleup_costshare.png (matches \includegraphics), 300 dpi.
 
-REVISION HISTORY (2026-07-03, session with Claude):
-  - Panel (b): x-axis endpoint = Ascension full build-out 7.6 Mt-CO2/yr
-    (old ~12 Mt coordinate removed; IEA DB June 2026 confirms 7.6 Mt phase 2).
-  - No project-name annotations anywhere (de-identification policy).
-  - Endpoint labels are values only.
-
 CALIBRATION (panel a, green -- ALK-anchored representative blend):
   Electricity floor fixed at 2.65 USD/kg (53 kWh/kg x 50 USD/MWh),
   scale-invariant. CAPEX-linked bundle = B * P^(m-1) solved to pass EXACTLY
