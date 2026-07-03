@@ -17,33 +17,34 @@ st.sidebar.header("Input Parameters")
 # 1-1. Technical Inputs
 st.sidebar.subheader("Technical")
 
-h2_capacity_kw = st.sidebar.number_input("Hydrogen Production Capacity (kW)", min_value=0.0, value=5000.0, step=100.0)
+h2_capacity_kw = st.sidebar.number_input("Hydrogen Production Capacity (kW)", min_value=0.0, value=1000.0, step=100.0)
 # construction_years = st.sidebar.number_input("Construction Period (years)", min_value=0.0, value=2.0, step=0.5)
 operation_years = st.sidebar.number_input("Operation Period (years)", min_value=1.0, value=20.0, step=1.0)
-stack_replacement_hours = st.sidebar.number_input("Stack Replacement Cycle (hours)", min_value=0.0, value=60000.0, step=1000.0)
-annual_operating_hours = st.sidebar.number_input("Annual Operating Hours (hours/year)", min_value=0.0, max_value=8760.0, value=8000.0, step=100.0)
-specific_energy = st.sidebar.number_input("Energy Efficiency (kWh/kgH₂)", min_value=1.0, value=55.5, step=0.1)
+stack_replacement_hours = st.sidebar.number_input("Stack Replacement Cycle (hours)", min_value=0.0, value=35040.0, step=1000.0)
+annual_operating_hours = st.sidebar.number_input("Annual Operating Hours (hours/year)", min_value=0.0, max_value=8760.0, value=4380.0, step=100.0)
+specific_energy = st.sidebar.number_input("Energy Efficiency (kWh/kgH₂)", min_value=1.0, value=51.0, step=0.1)
 stack_degradation = st.sidebar.number_input("Stack Degradation Rate (%/year)", min_value=0.0, max_value=10.0, value=1.0, step=0.1)
 
 
 # 1-2. Economic Inputs
 st.sidebar.subheader("Economic")
 
-capex_construction = st.sidebar.number_input("CAPEX - Construction (USD)", min_value=0.0, value=77_000.0 * (h2_capacity_kw / 500.0), step=1_000.0)
-capex_equipment = st.sidebar.number_input("CAPEX - Equipment (USD)", min_value=0.0, value=710_000.0 * (h2_capacity_kw / 500.0), step=1_000.0)
+capex_construction = st.sidebar.number_input("CAPEX - Construction (USD)", min_value=0.0, value=180.0 * h2_capacity_kw, step=1_000.0)
+capex_equipment = st.sidebar.number_input("CAPEX - Equipment (USD)", min_value=0.0, value=1_620.0 * h2_capacity_kw, step=1_000.0)
 capex_total = capex_construction + capex_equipment
 
 
-opex_annual = st.sidebar.number_input("OPEX (annual, USD/year)", min_value=0.0, value=2_300_000.0, step=1_000.0)
-elec_price = st.sidebar.number_input("Electricity Fee (USD/kWh)", min_value=0.0, value=0.04, step=0.01)
-h2_price = st.sidebar.number_input("Hydrogen Selling Price (USD/kgH₂)", min_value=0.0, value=7.7, step=0.1)
-o2_price = st.sidebar.number_input("Oxygen Selling Price (USD/kgO₂) : TBD", min_value=0.0, value=0.04, step=0.01)
-heat_price = st.sidebar.number_input("Heat Selling Price (USD/MWh) : TBD", min_value=0.0, value=0.0, step=1.0)
-discount_rate = st.sidebar.number_input("Discount Rate (%/year)", min_value=0.0, max_value=20.0, value=7.0, step=0.1)
-inflation_rate = st.sidebar.number_input("Inflation Rate (%/year)", min_value=0.0, max_value=10.0, value=2.0, step=0.1)
+opex_annual = st.sidebar.number_input("OPEX (annual, USD/year)", min_value=0.0, value=54_000.0, step=1_000.0)
+elec_price = st.sidebar.number_input("Electricity Fee (USD/kWh)", min_value=0.0, value=0.05, step=0.01)
+h2_price = st.sidebar.number_input("Hydrogen Selling Price (USD/kgH₂)", min_value=0.0, value=5.86, step=0.1)
+o2_price = st.sidebar.number_input("Oxygen Selling Price (USD/kgO₂)", min_value=0.0, value=0.0, step=0.01)
+heat_price = st.sidebar.number_input("Heat Selling Price (USD/MWh)", min_value=0.0, value=0.0, step=1.0)
+discount_rate = st.sidebar.number_input("Discount Rate (%/year)", min_value=0.0, max_value=20.0, value=8.0, step=0.1)
+inflation_rate = st.sidebar.number_input("Inflation Rate (%/year)", min_value=0.0, max_value=10.0, value=0.0, step=0.1)
 # cost_of_capital = st.sidebar.number_input("Cost of Capital (%/year)", min_value=0.0, max_value=20.0, value=8.0, step=0.1)
-corp_tax_rate = st.sidebar.number_input("Corporate Tax Rate (%)", min_value=0.0, max_value=50.0, value=20.0, step=0.1)
+corp_tax_rate = st.sidebar.number_input("Corporate Tax Rate (%)", min_value=0.0, max_value=50.0, value=22.0, step=0.1)
 tax_rate = corp_tax_rate / 100.0
+stack_rep_capex_frac = st.sidebar.number_input("Stack Replacement Cost (% of total CAPEX)", min_value=0.0, max_value=100.0, value=40.0, step=1.0) / 100.0  # [2026-07 manuscript alignment: was 30% of annual OPEX]
 
 # ---------------- 2. LCOH · Financial Model ----------------
 
@@ -87,8 +88,8 @@ years_since_last_replacement = 0
 
 for t in range(1, int(operation_years) + 1):
     opex_stack_t = 0.0
-    if stack_replacement_hours > 0 and hours_since_last_replacement >= stack_replacement_hours:
-        opex_stack_t = opex_annual * 0.3  
+    if stack_replacement_hours > 0 and hours_since_last_replacement + annual_operating_hours >= stack_replacement_hours:
+        opex_stack_t = capex_total * stack_rep_capex_frac  
         hours_since_last_replacement = 0.0
         years_since_last_replacement = 0
 
@@ -120,7 +121,22 @@ except Exception:
     p_irr_pct = np.nan
 
 # LCOH calcuation
-depreciation_amount = capex_total / operation_years if operation_years > 0 else 0.0
+# [2026-07 manuscript alignment] Depreciation method selector: MACRS-7 (T1 convention) or straight-line
+MACRS7 = [0.1429, 0.2449, 0.1749, 0.1249, 0.0893, 0.0892, 0.0893, 0.0446]
+dep_method = st.sidebar.selectbox("Depreciation Method", ["MACRS-7 (T1)", "Straight-line"], index=0)
+def depreciation_schedule(capex_val, n_years):
+    """Return year-indexed depreciation array (index 1..n_years)."""
+    dep = [0.0] * (int(n_years) + 1)
+    if dep_method.startswith("MACRS"):
+        for i, f in enumerate(MACRS7):
+            if i + 1 <= int(n_years):
+                dep[i + 1] = f * capex_val
+    else:
+        for t in range(1, int(n_years) + 1):
+            dep[t] = capex_val / n_years
+    return dep
+dep_schedule = depreciation_schedule(capex_total, operation_years)
+depreciation_amount = capex_total / operation_years if operation_years > 0 else 0.0  # retained for legacy component split
 numerator_sum_after_tax = capex_total
 denominator_sum = 0.0
 # Total NPV during the period
@@ -128,8 +144,8 @@ hours_since_last_replacement = 0.0
 years_since_last_replacement = 0
 for t in range(1, int(operation_years) + 1):
     opex_stack_t = 0.0
-    if stack_replacement_hours > 0 and hours_since_last_replacement >= stack_replacement_hours:
-        opex_stack_t = opex_annual * 0.3
+    if stack_replacement_hours > 0 and hours_since_last_replacement + annual_operating_hours >= stack_replacement_hours:
+        opex_stack_t = capex_total * stack_rep_capex_frac
         hours_since_last_replacement = 0.0
         years_since_last_replacement = 0
     degradation_multiplier = (1 - stack_deg_rate) ** years_since_last_replacement if stack_deg_rate > 0 else 1.0
@@ -138,7 +154,7 @@ for t in range(1, int(operation_years) + 1):
     cost_t = elec_kwh_t * elec_price + opex_annual + opex_stack_t
     o2_rev_t = h2_t * 8.0 * o2_price
     heat_rev_t = h2_t * heat_mwh_per_kg * heat_price
-    numerator_sum_after_tax += ((cost_t - o2_rev_t - heat_rev_t) * (1 - tax_rate) + tax_rate * depreciation_amount) / ((1 + r_real) ** t)
+    numerator_sum_after_tax += ((cost_t - o2_rev_t - heat_rev_t) * (1 - tax_rate) - tax_rate * dep_schedule[t]) / ((1 + r_real) ** t)  # [2026-07 FIX] shield subtracted (was added); MACRS-aware
     denominator_sum += h2_t / ((1 + r_real) ** t)
     hours_since_last_replacement += annual_operating_hours
     years_since_last_replacement += 1
@@ -163,12 +179,12 @@ def compute_lcoh_given_params(capex_total_val, specific_energy_val, elec_price_v
     years_since_last_replacement_val = 0
     numerator_val = capex_total_val
     denominator_val = 0.0
-    # Depreciation (Straight-line Method)
-    depreciation_val = capex_total_val / operation_years if operation_years > 0 else 0.0
+    # Depreciation (method follows sidebar selection)
+    dep_schedule_val = depreciation_schedule(capex_total_val, operation_years)
     for t in range(1, int(operation_years) + 1):
         opex_stack_repl = 0.0
-        if stack_replacement_hours > 0 and hours_since_last_replacement_val >= stack_replacement_hours:
-            opex_stack_repl = opex_annual_val * 0.3
+        if stack_replacement_hours > 0 and hours_since_last_replacement_val + annual_operating_hours_val >= stack_replacement_hours:
+            opex_stack_repl = capex_total_val * stack_rep_capex_frac
             hours_since_last_replacement_val = 0.0
             years_since_last_replacement_val = 0
         deg_multiplier = (1 - stack_degradation / 100.0) ** years_since_last_replacement_val if stack_degradation > 0 else 1.0
@@ -177,7 +193,7 @@ def compute_lcoh_given_params(capex_total_val, specific_energy_val, elec_price_v
         cost_t_val = elec_kwh_t_val * elec_price_val + opex_annual_val + opex_stack_repl
         o2_rev_t_val = h2_t_val * 8.0 * o2_price
         heat_rev_t_val = h2_t_val * heat_mwh_per_kg * heat_price
-        numerator_val += ((cost_t_val - o2_rev_t_val - heat_rev_t_val) * (1 - tax_rate) + tax_rate * depreciation_val) / ((1 + r_real_val) ** t)
+        numerator_val += ((cost_t_val - o2_rev_t_val - heat_rev_t_val) * (1 - tax_rate) - tax_rate * dep_schedule_val[t]) / ((1 + r_real_val) ** t)  # [2026-07 FIX] shield subtracted
         denominator_val += h2_t_val / ((1 + r_real_val) ** t)
         hours_since_last_replacement_val += annual_operating_hours_val
         years_since_last_replacement_val += 1
@@ -202,8 +218,8 @@ years_since_last_replacement_val = 0
 for t in range(1, int(operation_years) + 1):
     # Stack replacement
     opex_stack_t = 0.0
-    if stack_replacement_hours > 0 and hours_since_last_replacement_val >= stack_replacement_hours:
-        opex_stack_t = opex_annual * 0.3 
+    if stack_replacement_hours > 0 and hours_since_last_replacement_val + annual_operating_hours >= stack_replacement_hours:
+        opex_stack_t = capex_total * stack_rep_capex_frac 
         hours_since_last_replacement_val = 0.0
         years_since_last_replacement_val = 0
 
@@ -228,8 +244,8 @@ for t in range(1, int(operation_years) + 1):
     numerator_opex += opex_cost_t * (1 - tax_rate) * discount_factor        # AFter-tax O&M
     numerator_byprod += - (o2_rev_t + heat_rev_t) * (1 - tax_rate) * discount_factor  # Revenue
 
-    numerator_construction += tax_rate * (depreciation_amount * (capex_construction / capex_total)) * discount_factor
-    numerator_equipment   += tax_rate * (depreciation_amount * (capex_equipment   / capex_total)) * discount_factor
+    numerator_construction += -tax_rate * (dep_schedule[t] * (capex_construction / capex_total)) * discount_factor  # [2026-07 FIX] shield reduces capital charge
+    numerator_equipment   += -tax_rate * (dep_schedule[t] * (capex_equipment   / capex_total)) * discount_factor  # [2026-07 FIX] shield reduces capital charge
 
     hours_since_last_replacement_val += annual_operating_hours
     years_since_last_replacement_val += 1
