@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "hydrogen-TEA-power_eng: Open-source reference implementation of the harmonized after-tax DCF LCOH calculation"
+authors:
+  - family-names: "Yang"
+    given-names: "Donguk"
+    orcid: "https://orcid.org/0000-0002-4235-3264"
+    affiliation: "Korea Electric Power Corporation (KEPCO)"
+repository-code: "https://github.com/DongukYang/hydrogen-TEA-power_eng"
+license: MIT
+version: "1.1"
+date-released: "2026-07-04"
+keywords:
+  - green hydrogen
+  - renewable energy
+  - levelized cost of hydrogen
+  - techno-economic analysis
+preferred-citation:
+  type: article
+  title: "Comparative Levelized Cost of Hydrogen Production Pathways: A Critical Review"
+  author:
+    - family-names: "Yang"
+      given-names: "Donguk"
+  journal: "Renewable and Sustainable Energy Reviews"
+  year: 2026
+  status: "submitted"
